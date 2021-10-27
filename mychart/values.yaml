@@ -1,0 +1,46 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+prefix: kie-server
+# Name of the kieserver deployment
+APPLICATION_NAME: kie-server
+# The name where credentials secret are found
+CREDENTIALS_SECRET: credentials
+# Name of the namespace where the imagestreams can be found
+IMAGESTREAM_NAMESPACE: openshift
+# Left blank intentionally
+KIE_SERVER_PERSISTENCE_DS:
+# Dialect of the postgresql database
+KIE_SERVER_EXTERNALDB_DIALECT: org.hibernate.dialect.PostgreSQL95Dialect
+# Host of the external DB
+KIE_SERVER_EXTERNALDB_SERVICE_HOST: kieserver-dev.czxz9pla3u0h.us-east-2.rds.amazonaws.com
+# Port of the external DB
+KIE_SERVER_EXTERNALDB_SERVICE_PORT: 5432
+# The driver for the external DB
+KIE_SERVER_EXTERNALDB_DRIVER: postgresql
+# Name of the external DB in the postrges server
+KIE_SERVER_EXTERNALDB_DB: kieserver
+# Username of user in DB
+KIE_SERVER_EXTERNALDB_USER: postgres
+# Password of user in DB
+KIE_SERVER_EXTERNALDB_PWD: Nvsconsulting!0
+# Left blank intentionally / does not apply to postgresql
+EXTENSIONS_IMAGE: 
+# Left blank intentionally / does not apply to postgresql
+EXTENSIONS_IMAGE_NAMESPACE: 
+# Left blank intentionally / does not apply to postgresql
+EXTENSIONS_INSTALL_DIR: 
+# Where we can find the keystore file in our secrets
+KIE_SERVER_HTTPS_SECRET: https-keystore
+# the password for the jks file
+KIE_SERVER_HTTPS_PASSWORD: changeit
+# The name of the container to be started follows this naming convention -->  ArtifactID-Version = GroupID:ArtifactID:Version
+KIE_SERVER_CONTAINER_DEPLOYMENT: curia-1.0.0-SNAPSHOT=com.curo:curia:1.0.0-SNAPSHOT
+# Repo for the RHPAM project
+SOURCE_REPOSITORY_URL: https://gitlab.com/curo777/ekata-pam.git
+# Select master branch from our repo
+SOURCE_REPOSITORY_REF: 
+#The context directory
+
+KIE_SERVER_CPU_LIMIT: 2
+#Sets the cpu request 
+KIE_SERVER_CPU_REQUEST: 300m
