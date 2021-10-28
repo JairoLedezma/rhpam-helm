@@ -1,5 +1,5 @@
 kind: RoleBinding
-apiVersion: v1
+apiVersion: authorization.openshift.io/v1
 metadata:
   name: "{{.Values.APPLICATION_NAME}}-kieserver-edit"
   labels:

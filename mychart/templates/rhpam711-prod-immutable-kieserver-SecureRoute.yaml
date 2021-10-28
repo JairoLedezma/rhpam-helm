@@ -1,6 +1,5 @@
 kind: Route
-apiVersion: v1
-id: "{{.Values.APPLICATION_NAME}}-kieserver-https"
+apiVersion: route.openshift.io/v1
 metadata:
   name: "{{.Values.APPLICATION_NAME}}-kieserver"
   labels:
