@@ -1,4 +1,4 @@
-kind: ImageStream
+kind: image.openshift.io/v1
 apiVersion: v1
 metadata:
   name: "{{.Values.APPLICATION_NAME}}-kieserver"
