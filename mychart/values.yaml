@@ -6,8 +6,9 @@ APPLICATION_NAME: kie-server
 # The name where credentials secret are found
 CREDENTIALS_SECRET: credentials
 # Name of the namespace where the imagestreams can be found
-IMAGESTREAM_NAMESPACE: openshift
+IMAGE_STREAM_NAMESPACE: openshift
 # Left blank intentionally
+KIE Server ImageStream Name
 KIE_SERVER_PERSISTENCE_DS:
 # Dialect of the postgresql database
 KIE_SERVER_EXTERNALDB_DIALECT: org.hibernate.dialect.PostgreSQL95Dialect
@@ -31,16 +32,39 @@ EXTENSIONS_IMAGE_NAMESPACE:
 EXTENSIONS_INSTALL_DIR: 
 # Where we can find the keystore file in our secrets
 KIE_SERVER_HTTPS_SECRET: https-keystore
+KIE_SERVER_HTTPS_KEYSTORE: keystore.jks
 # the password for the jks file
 KIE_SERVER_HTTPS_PASSWORD: changeit
 # The name of the container to be started follows this naming convention -->  ArtifactID-Version = GroupID:ArtifactID:Version
 KIE_SERVER_CONTAINER_DEPLOYMENT: curia-1.0.0-SNAPSHOT=com.curo:curia:1.0.0-SNAPSHOT
 # Repo for the RHPAM project
+KIE_SERVER_IMAGE_STREAM_NAME: rhpam-kieserver-rhel8
+SSO_DISABLE_SSL_CERTIFICATE_VALIDATION: false
+SSO_PRINCIPAL_ATTRIBUTE: preferred_username
+KIE_SERVER_EXTERNALDB_JNDI: java:jboss/datasources/jbpmDS
+EXTENSIONS_INSTALL_DIR:
+IMAGE_STREAM_TAG: 7.11.0
+
+MAVEN_MIRROR_URL: 
+KIE_SERVER_HTTPS_NAME: jboss
+MAVEN_MIRROR_OF: external:*
+KIE_MBEANS: enabled
+KIE_SERVER_BYPASS_AUTH_USER: false
+EXTENSIONS_IMAGE:
+DROOLS_SERVER_FILTER_CLASSES: true
+
 SOURCE_REPOSITORY_URL: https://gitlab.com/curo777/ekata-pam.git
 # Select master branch from our repo
 SOURCE_REPOSITORY_REF: 
 #The context directory
-
+MAVEN_REPO_PASSWORD: 
+MAVEN_REPO_ID: repo-custom
 KIE_SERVER_CPU_LIMIT: 2
+KIE_SERVER_CPU_REQUEST: 750m
+KIE_SERVER_MEMORY_LIMIT: 2Gi
+KIE_SERVER_MEMORY_REQUEST: 1536Mi
+KIE_SERVER_MGMT_DISABLED: true
+TIMER_SERVICE_DATA_STORE_REFRESH_INTERVAL: 30000
+
 #Sets the cpu request 
 KIE_SERVER_CPU_REQUEST: 300m
