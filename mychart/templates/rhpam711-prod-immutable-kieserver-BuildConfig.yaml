@@ -1,38 +1,38 @@
 kind: BuildConfig
     apiVersion: v1
     metadata:
-      name: "{{ .Values.APPLICATION_NAME }}-kieserver"
+      name: "{{.Values.APPLICATION_NAME}}-kieserver"
       labels:
-        application: "{{ .Values.APPLICATION_NAME }}"
-        service: "{{ .Values.APPLICATION_NAME }}-kieserver"
+        application: "{{.Values.APPLICATION_NAME}}"
+        service: "{{.Values.APPLICATION_NAME}}-kieserver"
       annotations:
         template.alpha.openshift.io/wait-for-ready: "true"
     spec:
       source:
         type: Git
         git:
-          uri: "{{ .Values.SOURCE_REPOSITORY_URL}}"
-          ref: "{{ .Values.SOURCE_REPOSITORY_REF}}"
-        contextDir: "{{ .Values.CONTEXT_DIR}}"
+          uri: "{{.Values.SOURCE_REPOSITORY_URL}}"
+          ref: "{{.Values.SOURCE_REPOSITORY_REF}}"
+        contextDir: "{{.Values.CONTEXT_DIR}}"
       strategy:
         type: Source
         sourceStrategy:
           env:
             - name: KIE_SERVER_CONTAINER_DEPLOYMENT
-              value: "{{ .Values.KIE_SERVER_CONTAINER_DEPLOYMENT}}"
+              value: "{{.Values.KIE_SERVER_CONTAINER_DEPLOYMENT}}"
             - name: MAVEN_MIRROR_URL
-              value: "{{ .Values.MAVEN_MIRROR_URL}}"
+              value: "{{.Values.MAVEN_MIRROR_URL}}"
             - name: ARTIFACT_DIR
-              value: "{{ .Values.ARTIFACT_DIR}}"
+              value: "{{.Values.ARTIFACT_DIR}}"
           forcePull: true
           from:
             kind: ImageStreamTag
-            namespace: "{{ .Values.IMAGE_STREAM_NAMESPACE}}"
+            namespace: "{{.Values.IMAGE_STREAM_NAMESPACE}}"
             name: "{{.Values.KIE_SERVER_IMAGE_STREAM_NAME}}:{{.Values.IMAGE_STREAM_TAG}}"
       output:
         to:
           kind: ImageStreamTag
-          name: "{{ .Values.APPLICATION_NAME }}-kieserver:latest"
+          name: "{{.Values.APPLICATION_NAME }}-kieserver:latest"
       triggers:
         - type: GitHub
           github:
