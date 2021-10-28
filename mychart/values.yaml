@@ -8,7 +8,6 @@ CREDENTIALS_SECRET: credentials
 # Name of the namespace where the imagestreams can be found
 IMAGE_STREAM_NAMESPACE: openshift
 # Left blank intentionally
-KIE Server ImageStream Name
 KIE_SERVER_PERSISTENCE_DS:
 # Dialect of the postgresql database
 KIE_SERVER_EXTERNALDB_DIALECT: org.hibernate.dialect.PostgreSQL95Dialect
