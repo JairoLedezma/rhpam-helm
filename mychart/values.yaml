@@ -2,7 +2,7 @@
 # Declare variables to be passed into your templates.
 prefix: 
 # Name of the kieserver deployment
-APPLICATION_NAME: kie-server
+APPLICATION_NAME: ekata-pam
 # The name where credentials secret are found
 CREDENTIALS_SECRET: credentials
 # Name of the namespace where the imagestreams can be found
