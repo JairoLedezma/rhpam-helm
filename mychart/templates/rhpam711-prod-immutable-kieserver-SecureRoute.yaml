@@ -1,18 +1,18 @@
 kind: Route
-    apiVersion: v1
-    id: "{{.Values.APPLICATION_NAME}}-kieserver-https"
-    metadata:
-      name: "{{.Values.APPLICATION_NAME}}-kieserver"
-      labels:
-        application: "{{.Values.APPLICATION_NAME}}"
-        service: "{{.Values.APPLICATION_NAME}}-kieserver"
-      annotations:
-        description: Route for KIE Server's https service.
-    spec:
-      host: "{{.Values.KIE_SERVER_HOSTNAME_HTTPS}}"
-      to:
-        name: "${{.Values.APPLICATION_NAME}}-kieserver"
-      port:
-        targetPort: https
-      tls:
-        termination: passthrough
+apiVersion: v1
+id: "{{.Values.APPLICATION_NAME}}-kieserver-https"
+metadata:
+  name: "{{.Values.APPLICATION_NAME}}-kieserver"
+  labels:
+    application: "{{.Values.APPLICATION_NAME}}"
+    service: "{{.Values.APPLICATION_NAME}}-kieserver"
+  annotations:
+    description: Route for KIE Server's https service.
+spec:
+  host: "{{.Values.KIE_SERVER_HOSTNAME_HTTPS}}"
+  to:
+    name: "${{.Values.APPLICATION_NAME}}-kieserver"
+  port:
+    targetPort: https
+  tls:
+    termination: passthrough
