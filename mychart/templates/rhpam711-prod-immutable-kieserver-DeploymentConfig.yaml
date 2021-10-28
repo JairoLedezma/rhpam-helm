@@ -1,0 +1,305 @@
+kind: DeploymentConfig
+    apiVersion: v1
+    metadata:
+      name: "{{.Values.APPLICATION_NAME}}-kieserver"
+      labels:
+        application: "{{.Values.APPLICATION_NAME}}"
+        service: "{{.Values.APPLICATION_NAME}}-kieserver"
+        services.server.kie.org/kie-server-id: "{{.Values.APPLICATION_NAME}}-kieserver"
+      annotations:
+        template.alpha.openshift.io/wait-for-ready: "true"
+    spec:
+      revisionHistoryLimit: 10
+      strategy:
+        rollingParams:
+          maxSurge: 100%
+          maxUnavailable: 0
+        type: Rolling
+      triggers:
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - "{{.Values.APPLICATION_NAME}}-kieserver"
+            from:
+              kind: ImageStream
+              name: "{{.Values.APPLICATION_NAME}}-kieserver"
+        - type: ConfigChange
+      replicas: 2
+      selector:
+        deploymentConfig: "{{.Values.APPLICATION_NAME}}-kieserver"
+      template:
+        metadata:
+          name: "{{.Values.APPLICATION_NAME}}-kieserver"
+          labels:
+            deploymentConfig: "{{.Values.APPLICATION_NAME}}-kieserver"
+            application: "{{.Values.APPLICATION_NAME}}"
+            service: "{{.Values.APPLICATION_NAME}}-kieserver"
+            services.server.kie.org/kie-server-id: "{{.Values.APPLICATION_NAME}}-kieserver"
+            cluster: "jgrp.k8s.{{.Values.APPLICATION_NAME}}.kieserver"
+        spec:
+          serviceAccountName: "{{.Values.APPLICATION_NAME}}-kieserver"
+          terminationGracePeriodSeconds: 90
+          containers:
+            - name: "{{.Values.APPLICATION_NAME}}-kieserver"
+              image: "{{.Values.APPLICATION_NAME}}-kieserver"
+              imagePullPolicy: Always
+              lifecycle:
+                postStart:
+                  exec:
+                    command:
+                      - /bin/sh
+                      - /opt/eap/bin/launch/jboss-kie-kieserver-hooks.sh
+                preStop:
+                  exec:
+                    command:
+                      - /bin/sh
+                      - /opt/eap/bin/launch/jboss-kie-kieserver-hooks.sh
+              resources:
+                limits:
+                  memory: "{{.ValuesKIE_SERVER_MEMORY_LIMIT}}"
+                  cpu: "{{.Values.KIE_SERVER_CPU_LIMIT}}"
+                requests:
+                  memory: "{{.Values.KIE_SERVER_MEMORY_REQUEST}}"
+                  cpu: "{{.Values.KIE_SERVER_CPU_REQUEST}}"
+              volumeMounts:
+                - name: kieserver-keystore-volume
+                  mountPath: "/etc/kieserver-secret-volume"
+                  readOnly: true
+              livenessProbe:
+                httpGet:
+                  path: /services/rest/server/healthcheck
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 180
+                timeoutSeconds: 2
+                periodSeconds: 15
+                failureThreshold: 3
+              readinessProbe:
+                httpGet:
+                  path: /services/rest/server/readycheck
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 30
+                timeoutSeconds: 2
+                periodSeconds: 5
+                failureThreshold: 36
+              ports:
+                - name: jolokia
+                  containerPort: 8778
+                  protocol: TCP
+                - name: http
+                  containerPort: 8080
+                  protocol: TCP
+                - name: https
+                  containerPort: 8443
+                  protocol: TCP
+              env:
+                - name: WORKBENCH_SERVICE_NAME
+                  value: "{{.Values.BUSINESS_CENTRAL_SERVICE}}"
+                - name: KIE_ADMIN_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: "{{.Values.CREDENTIALS_SECRET}}"
+                      key: KIE_ADMIN_USER
+                - name: KIE_ADMIN_PWD
+                  valueFrom:
+                    secretKeyRef:
+                      name: "{{.Values.CREDENTIALS_SECRET}}"
+                      key: KIE_ADMIN_PWD
+                - name: KIE_SERVER_MODE
+                  value: "DEVELOPMENT"
+                - name: KIE_MBEANS
+                  value: "{{.Values.KIE_MBEANS}}"
+                - name: DROOLS_SERVER_FILTER_CLASSES
+                  value: "{{.Values.DROOLS_SERVER_FILTER_CLASSES}}"
+                - name: PROMETHEUS_SERVER_EXT_DISABLED
+                  value: "{{.Values.PROMETHEUS_SERVER_EXT_DISABLED}}"
+                - name: KIE_SERVER_BYPASS_AUTH_USER
+                  value: "{{.Values.KIE_SERVER_BYPASS_AUTH_USER}}"
+                - name: KIE_SERVER_ID
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['services.server.kie.org/kie-server-id']
+                - name: KIE_SERVER_ROUTE_NAME
+                  value: "insecure-{{.Values.APPLICATION_NAME}}-kieserver"
+                - name: KIE_SERVER_ROUTER_SERVICE
+                  value: "{{.Values.APPLICATION_NAME}}-smartrouter"
+                - name: KIE_SERVER_CONTAINER_DEPLOYMENT
+                  value: "{{.Values.KIE_SERVER_CONTAINER_DEPLOYMENT}}"
+                - name: MAVEN_MIRROR_URL
+                  value: "{{.Values.MAVEN_MIRROR_URL}}"
+                - name: MAVEN_MIRROR_OF
+                  value: "{{.Values.MAVEN_MIRROR_OF}}"
+                - name: MAVEN_REPOS
+                  value: "RHPAMCENTR,EXTERNAL"
+                - name: RHPAMCENTR_MAVEN_REPO_ID
+                  value: "repo-rhpamcentr"
+                - name: RHPAMCENTR_MAVEN_REPO_SERVICE
+                  value: "{{.Values.BUSINESS_CENTRAL_SERVICE}}"
+                - name: RHPAMCENTR_MAVEN_REPO_PATH
+                  value: "/maven2/"
+                - name: RHPAMCENTR_MAVEN_REPO_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: "{{.Values.CREDENTIALS_SECRET}}"
+                      key: KIE_ADMIN_USER
+                - name: RHPAMCENTR_MAVEN_REPO_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: "{{.Values.CREDENTIALS_SECRET}}"
+                      key: KIE_ADMIN_PWD
+                - name: EXTERNAL_MAVEN_REPO_ID
+                  value: "{{.Values.MAVEN_REPO_ID}}"
+                - name: EXTERNAL_MAVEN_REPO_URL
+                  value: "{{.Values.MAVEN_REPO_URL}}"
+                - name: EXTERNAL_MAVEN_REPO_USERNAME
+                  value: "{{.Values.MAVEN_REPO_USERNAME}}"
+                - name: EXTERNAL_MAVEN_REPO_PASSWORD
+                  value: "{{.values.MAVEN_REPO_PASSWORD}}"
+                - name: KIE_SERVER_PERSISTENCE_DS
+                  value: "{{.Values.KIE_SERVER_PERSISTENCE_DS}}"
+                - name: DATASOURCES
+                  value: "RHPAM"
+                - name: RHPAM_DATABASE
+                  value: "{{.Values.KIE_SERVER_POSTGRESQL_DB}}"
+                - name: RHPAM_JNDI
+                  value: "{{.Values.KIE_SERVER_PERSISTENCE_DS}}"
+                - name: RHPAM_JTA
+                  value: "true"
+## External database settings BEGIN
+                - name: DATASOURCES
+                  value: "RHPAM"
+                - name: RHPAM_DATABASE
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_DB}}"
+                - name: RHPAM_SERVICE_HOST
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_SERVICE_HOST}}"
+                - name: RHPAM_SERVICE_PORT
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_SERVICE_PORT}}"
+                - name: RHPAM_JNDI
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_JNDI}}"
+                - name: RHPAM_DRIVER
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_DRIVER}}"
+                - name: RHPAM_USERNAME
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_USER}}"
+                - name: RHPAM_PASSWORD
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_PWD}}"
+                - name: RHPAM_NONXA
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_NONXA}}"
+                - name: RHPAM_URL
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_URL}}"
+                - name: RHPAM_XA_CONNECTION_PROPERTY_URL
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_URL}}"
+                - name: RHPAM_MIN_POOL_SIZE
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_MIN_POOL_SIZE}}"
+                - name: RHPAM_MAX_POOL_SIZE
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_MAX_POOL_SIZE}}"
+                - name: RHPAM_CONNECTION_CHECKER
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_CONNECTION_CHECKER}}"
+                - name: RHPAM_EXCEPTION_SORTER
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_EXCEPTION_SORTER}}"
+                - name: RHPAM_BACKGROUND_VALIDATION
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_BACKGROUND_VALIDATION}}"
+                - name: RHPAM_VALIDATION_MILLIS
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_BACKGROUND_VALIDATION_MILLIS}}"
+                - name: RHPAM_DRIVER_TYPE
+                  value: "{{.Values.KIE_SERVER_EXTERNALDB_DRIVER_TYPE}}"
+                - name: RHPAM_JTA
+                  value: "true"
+## External database settings END
+                - name: TIMER_SERVICE_DATA_STORE_REFRESH_INTERVAL
+                  value: "{{.Values.TIMER_SERVICE_DATA_STORE_REFRESH_INTERVAL}}"
+                - name: HTTPS_KEYSTORE_DIR
+                  value: "/etc/kieserver-secret-volume"
+                - name: HTTPS_KEYSTORE
+                  value: "{{.Values.KIE_SERVER_HTTPS_KEYSTORE}}"
+                - name: HTTPS_NAME
+                  value: "{{.Values.KIE_SERVER_HTTPS_NAME}}"
+                - name: HTTPS_PASSWORD
+                  value: "{{.Values.KIE_SERVER_HTTPS_PASSWORD}}"
+                - name: KIE_SERVER_MGMT_DISABLED
+                  value: "{{.Values.KIE_SERVER_MGMT_DISABLED}}"
+                - name: KIE_SERVER_STARTUP_STRATEGY
+                  value: "OpenShiftStartupStrategy"
+                - name: JGROUPS_PING_PROTOCOL
+                  value: "kubernetes.KUBE_PING"
+                - name: KUBERNETES_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: KUBERNETES_LABELS
+                  value: "cluster=jgrp.k8s.${APPLICATION_NAME}.kieserver"
+                - name: SSO_URL
+                  value: "{{.Values.SSO_URL}}"
+                - name: SSO_OPENIDCONNECT_DEPLOYMENTS
+                  value: "ROOT.war"
+                - name: SSO_REALM
+                  value: "{{.Values.SSO_REALM}}"
+                - name: SSO_SECRET
+                  value: "{{.Values.KIE_SERVER_SSO_SECRET}}"
+                - name: SSO_CLIENT
+                  value: "{{.Values.KIE_SERVER_SSO_CLIENT}}"
+                - name: SSO_USERNAME
+                  value: "{{.Values.SSO_USERNAME}}"
+                - name: SSO_PASSWORD
+                  value: "{{.Values.SSO_PASSWORD}}"
+                - name: SSO_DISABLE_SSL_CERTIFICATE_VALIDATION
+                  value: "{{.Values.SSO_DISABLE_SSL_CERTIFICATE_VALIDATION}}"
+                - name: SSO_PRINCIPAL_ATTRIBUTE
+                  value: "{{.Values.SSO_PRINCIPAL_ATTRIBUTE}}"
+                - name: HOSTNAME_HTTP
+                  value: "{{.Values.KIE_SERVER_HOSTNAME_HTTP}}"
+                - name: HOSTNAME_HTTPS
+                  value: "{{.Values.KIE_SERVER_HOSTNAME_HTTPS}}"
+                - name: AUTH_LDAP_URL
+                  value: "{{.Values.AUTH_LDAP_URL}}"
+                - name: AUTH_LDAP_BIND_DN
+                  value: "{{.Values.AUTH_LDAP_BIND_DN}}"
+                - name: AUTH_LDAP_BIND_CREDENTIAL
+                  value: "{{.Values.AUTH_LDAP_BIND_CREDENTIAL}}"
+                - name: AUTH_LDAP_LOGIN_MODULE
+                  value: "{{.Values.AUTH_LDAP_LOGIN_MODULE}}"
+                - name: AUTH_LDAP_JAAS_SECURITY_DOMAIN
+                  value: "{{.Values.AUTH_LDAP_JAAS_SECURITY_DOMAIN}}"
+                - name: AUTH_LDAP_BASE_CTX_DN
+                  value: "{{.Values.AUTH_LDAP_BASE_CTX_DN}}"
+                - name: AUTH_LDAP_BASE_FILTER
+                  value: "{{.Values.AUTH_LDAP_BASE_FILTER}}"
+                - name: AUTH_LDAP_SEARCH_SCOPE
+                  value: "{{.Values.AUTH_LDAP_SEARCH_SCOPE}}"
+                - name: AUTH_LDAP_SEARCH_TIME_LIMIT
+                  value: "{{.Values.AUTH_LDAP_SEARCH_TIME_LIMIT}}"
+                - name: AUTH_LDAP_DISTINGUISHED_NAME_ATTRIBUTE
+                  value: "{{.Values.AUTH_LDAP_DISTINGUISHED_NAME_ATTRIBUTE}}"
+                - name: AUTH_LDAP_PARSE_USERNAME
+                  value: "{{.Values.AUTH_LDAP_PARSE_USERNAME}}"
+                - name: AUTH_LDAP_USERNAME_BEGIN_STRING
+                  value: "{{.Values.AUTH_LDAP_USERNAME_BEGIN_STRING}}"
+                - name: AUTH_LDAP_USERNAME_END_STRING
+                  value: "{{.Values.AUTH_LDAP_USERNAME_END_STRING}}"
+                - name: AUTH_LDAP_ROLE_ATTRIBUTE_ID
+                  value: "{{.Values.AUTH_LDAP_ROLE_ATTRIBUTE_ID}}"
+                - name: AUTH_LDAP_ROLES_CTX_DN
+                  value: "{{.Values.AUTH_LDAP_ROLES_CTX_DN}}"
+                - name: AUTH_LDAP_ROLE_FILTER
+                  value: "{{.Values.AUTH_LDAP_ROLE_FILTER}}"
+                - name: AUTH_LDAP_ROLE_RECURSION
+                  value: "{{.Values.AUTH_LDAP_ROLE_RECURSION}}"
+                - name: AUTH_LDAP_DEFAULT_ROLE
+                  value: "{{.Values.AUTH_LDAP_DEFAULT_ROLE}}"
+                - name: AUTH_LDAP_ROLE_NAME_ATTRIBUTE_ID
+                  value: "{{.Values.AUTH_LDAP_ROLE_NAME_ATTRIBUTE_ID}}"
+                - name: AUTH_LDAP_PARSE_ROLE_NAME_FROM_DN
+                  value: "{{.Values.AUTH_LDAP_PARSE_ROLE_NAME_FROM_DN}}"
+                - name: AUTH_LDAP_ROLE_ATTRIBUTE_IS_DN
+                  value: "{{.Values.AUTH_LDAP_ROLE_ATTRIBUTE_IS_DN}}"
+                - name: AUTH_LDAP_REFERRAL_USER_ATTRIBUTE_ID_TO_CHECK
+                  value: "{{.Values.AUTH_LDAP_REFERRAL_USER_ATTRIBUTE_ID_TO_CHECK}}"
+                - name: AUTH_ROLE_MAPPER_ROLES_PROPERTIES
+                  value: "{{.Values.AUTH_ROLE_MAPPER_ROLES_PROPERTIES}}"
+                - name: AUTH_ROLE_MAPPER_REPLACE_ROLE
+                  value: "{{.Values.AUTH_ROLE_MAPPER_REPLACE_ROLE}}"
+          volumes:
+            - name: kieserver-keystore-volume
+              secret:
+                secretName: "{{.Values.KIE_SERVER_HTTPS_SECRET}}"

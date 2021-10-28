@@ -1,0 +1,11 @@
+kind: RoleBinding
+    apiVersion: v1
+    metadata:
+      name: "{{.Values.APPLICATION_NAME}}-kieserver-edit"
+      labels:
+        application: "{{.Values.APPLICATION_NAME}}"
+    subjects:
+      - kind: ServiceAccount
+        name: "{{.Values.APPLICATION_NAME}}-kieserver"
+    roleRef:
+      name: edit
