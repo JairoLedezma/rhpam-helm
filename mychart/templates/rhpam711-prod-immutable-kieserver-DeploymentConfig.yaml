@@ -156,7 +156,7 @@ kind: DeploymentConfig
                 - name: EXTERNAL_MAVEN_REPO_USERNAME
                   value: "{{.Values.MAVEN_REPO_USERNAME}}"
                 - name: EXTERNAL_MAVEN_REPO_PASSWORD
-                  value: "{{.values.MAVEN_REPO_PASSWORD}}"
+                  value: "{{.Values.MAVEN_REPO_PASSWORD}}"
                 - name: KIE_SERVER_PERSISTENCE_DS
                   value: "{{.Values.KIE_SERVER_PERSISTENCE_DS}}"
                 - name: DATASOURCES
