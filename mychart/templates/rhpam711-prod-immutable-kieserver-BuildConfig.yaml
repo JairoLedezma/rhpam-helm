@@ -37,17 +37,3 @@ spec:
         name: "{{.Values.KIE_SERVER_IMAGE_STREAM_NAME}}:{{.Values.IMAGE_STREAM_TAG}}"
         namespace: "{{.Values.IMAGE_STREAM_NAMESPACE}}"
     type: Source
-  triggers: 
-    - 
-      github: 
-        secret: "{{.Values.GITHUB_WEBHOOK_SECRET}}"
-      type: GitHub
-    - 
-      generic: 
-        secret: "{{.Values.GENERIC_WEBHOOK_SECRET}}"
-      type: Generic
-    - 
-      imageChange: {}
-      type: ImageChange
-    - 
-      type: ConfigChange
