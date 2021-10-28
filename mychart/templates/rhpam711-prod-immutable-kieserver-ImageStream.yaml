@@ -1,7 +1,0 @@
-kind: ImageStream
-apiVersion: image.openshift.io/v1
-metadata:
-  name: "{{.Values.APPLICATION_NAME}}-kieserver"
-  labels:
-    application: "{{.Values.APPLICATION_NAME}}"
-    service: "{{.Values.APPLICATION_NAME}}-kieserver"
