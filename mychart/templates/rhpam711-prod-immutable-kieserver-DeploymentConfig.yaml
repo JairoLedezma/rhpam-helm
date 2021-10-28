@@ -57,8 +57,8 @@ spec:
                   - /opt/eap/bin/launch/jboss-kie-kieserver-hooks.sh
           resources:
             limits:
-              memory: "{{.ValuesKIE_SERVER_MEMORY_LIMIT}}"
-              cpu: "{{.Values.KIE_SERVER_CPU_LIMIT}}"
+              memory: {{.ValuesKIE_SERVER_MEMORY_LIMIT}}
+              cpu: {{.Values.KIE_SERVER_CPU_LIMIT}}
             requests:
               memory: "{{.Values.KIE_SERVER_MEMORY_REQUEST}}"
               cpu: "{{.Values.KIE_SERVER_CPU_REQUEST}}"
