@@ -19,6 +19,8 @@ spec:
       ref: "{{.Values.SOURCE_REPOSITORY_REF}}"
       uri: "{{.Values.SOURCE_REPOSITORY_URL}}"
     type: Git
+    sourceSecret:
+      name: jl-gitlab-token
   strategy: 
     sourceStrategy: 
       env: 
