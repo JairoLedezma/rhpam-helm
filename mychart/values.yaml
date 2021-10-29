@@ -23,6 +23,7 @@ KIE_SERVER_EXTERNALDB_DB: kieserver
 KIE_SERVER_EXTERNALDB_USER: postgres
 # Password of user in DB
 KIE_SERVER_EXTERNALDB_PWD: 
+RHPAM_URL:
 # Left blank intentionally / does not apply to postgresql
 EXTENSIONS_IMAGE: 
 # Left blank intentionally / does not apply to postgresql
