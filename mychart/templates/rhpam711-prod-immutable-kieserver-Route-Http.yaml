@@ -1,5 +1,5 @@
-kind: Route
 apiVersion: route.openshift.io/v1
+kind: Route
 metadata:
   name: "insecure-${APPLICATION_NAME}-kieserver"
   labels:
@@ -14,6 +14,7 @@ metadata:
 spec:
   host: "${KIE_SERVER_HOSTNAME_HTTP}"
   to:
+    kind: Service
     name: "${APPLICATION_NAME}-kieserver"
   port:
     targetPort: http
