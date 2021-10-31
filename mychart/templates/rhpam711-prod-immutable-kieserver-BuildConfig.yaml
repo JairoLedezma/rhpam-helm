@@ -4,9 +4,12 @@ kind: BuildConfig
 metadata: 
   annotations: 
     template.alpha.openshift.io/wait-for-ready: "true"
+    meta.helm.sh/release-name: {{ .Values.APPLICATION_NAME }}
+    meta.helm.sh/release-namespace: {{ .Values.NAMESPACE }}
   labels: 
     application: "{{.Values.APPLICATION_NAME}}"
     service: "{{.Values.APPLICATION_NAME}}-kieserver"
+    app.kubernetes.io/managed-by: Helm
   name: "{{.Values.APPLICATION_NAME}}-kieserver"
 spec: 
   output: 

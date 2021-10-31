@@ -19,5 +19,8 @@ metadata:
   labels:
     application: "{{.Values.APPLICATION_NAME}}"
     service: "{{.Values.APPLICATION_NAME}}-kieserver"
+    app.kubernetes.io/managed-by: Helm
   annotations:
     description: All the KIE Server web server's ports.
+    meta.helm.sh/release-name: {{ .Values.APPLICATION_NAME }}
+    meta.helm.sh/release-namespace: {{ .Values.NAMESPACE }}

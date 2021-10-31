@@ -2,8 +2,12 @@ kind: RoleBinding
 apiVersion: authorization.openshift.io/v1
 metadata:
   name: "{{.Values.APPLICATION_NAME}}-kieserver-edit"
+  annotations:
+    meta.helm.sh/release-name: {{ .Values.APPLICATION_NAME }}
+    meta.helm.sh/release-namespace: {{ .Values.NAMESPACE }}
   labels:
     application: "{{.Values.APPLICATION_NAME}}"
+    app.kubernetes.io/managed-by: Helm
 subjects:
   - kind: ServiceAccount
     name: "{{.Values.APPLICATION_NAME}}-kieserver"
