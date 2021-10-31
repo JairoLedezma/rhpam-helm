@@ -1,6 +1,5 @@
 kind: Route
 apiVersion: v1
-id: "${APPLICATION_NAME}-kieserver-https"
 metadata:
   name: "${APPLICATION_NAME}-kieserver"
   labels:

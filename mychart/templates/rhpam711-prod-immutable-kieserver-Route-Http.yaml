@@ -1,6 +1,5 @@
 kind: Route
 apiVersion: v1
-id: "insecure-${APPLICATION_NAME}-kieserver-http"
 metadata:
   name: "insecure-${APPLICATION_NAME}-kieserver"
   labels:
