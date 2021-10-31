@@ -2,6 +2,7 @@
 # Declare variables to be passed into your templates.
 prefix: 
 # Name of the kieserver deployment
+NAMESPACE: jl-rds-temp-sandbox
 APPLICATION_NAME: myapp
 # The name where credentials secret are found
 CREDENTIALS_SECRET: credentials
