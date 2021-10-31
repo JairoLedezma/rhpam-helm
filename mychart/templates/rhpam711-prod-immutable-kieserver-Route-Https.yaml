@@ -9,7 +9,7 @@ metadata:
   annotations:
     description: Route for KIE Server's https service.
     meta.helm.sh/release-name: {{ .Values.APPLICATION_NAME }}
-meta.helm.sh/release-namespace: {{ .Values.NAMESPACE }}
+    meta.helm.sh/release-namespace: {{ .Values.NAMESPACE }}
 spec:
   host: "${KIE_SERVER_HOSTNAME_HTTPS}"
   to:
