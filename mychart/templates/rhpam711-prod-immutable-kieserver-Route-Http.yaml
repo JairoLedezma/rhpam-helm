@@ -1,10 +1,10 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: "insecure-${APPLICATION_NAME}-kieserver"
+  name: "insecure-{{ .Values.APPLICATION_NAME }}-kieserver"
   labels:
-    application: "${APPLICATION_NAME}"
-    service: "${APPLICATION_NAME}-kieserver"
+    application: "{{ .Values.APPLICATION_NAME }}"
+    service: "{{ .Values.APPLICATION_NAME }}-kieserver"
     app.kubernetes.io/managed-by: Helm
   annotations:
     description: Route for KIE Server's http service.
@@ -12,9 +12,9 @@ metadata:
     meta.helm.sh/release-name: {{ .Values.APPLICATION_NAME }}
     meta.helm.sh/release-namespace: {{ .Values.NAMESPACE }}
 spec:
-  host: "${KIE_SERVER_HOSTNAME_HTTP}"
+  host: "{{ .Values.KIE_SERVER_HOSTNAME_HTTP}}"
   to:
     kind: Service
-    name: "${APPLICATION_NAME}-kieserver"
+    name: "{{ .Values.APPLICATION_NAME }}-kieserver"
   port:
     targetPort: http
