@@ -2,7 +2,7 @@
 # Declare variables to be passed into your templates.
 prefix: 
 # Name of the kieserver deployment
-APPLICATION_NAME: myapp
+APPLICATION_NAME: ekata-pam
 # The name where credentials secret are found
 CREDENTIALS_SECRET: credentials
 # Name of the namespace where the imagestreams can be found
@@ -12,7 +12,7 @@ KIE_SERVER_PERSISTENCE_DS:
 # Dialect of the postgresql database
 KIE_SERVER_EXTERNALDB_DIALECT: org.hibernate.dialect.PostgreSQL95Dialect
 # Host of the external DB
-KIE_SERVER_EXTERNALDB_SERVICE_HOST: 
+KIE_SERVER_EXTERNALDB_SERVICE_HOST: kieserver-dev.czxz9pla3u0h.us-east-2.rds.amazonaws.com
 # Port of the external DB
 KIE_SERVER_EXTERNALDB_SERVICE_PORT: 5432
 # The driver for the external DB
@@ -22,8 +22,7 @@ KIE_SERVER_EXTERNALDB_DB: kieserver
 # Username of user in DB
 KIE_SERVER_EXTERNALDB_USER: postgres
 # Password of user in DB
-KIE_SERVER_EXTERNALDB_PWD: 
-RHPAM_URL:
+KIE_SERVER_EXTERNALDB_PWD: Nvsconsulting!0
 # Left blank intentionally / does not apply to postgresql
 EXTENSIONS_IMAGE: 
 # Left blank intentionally / does not apply to postgresql
