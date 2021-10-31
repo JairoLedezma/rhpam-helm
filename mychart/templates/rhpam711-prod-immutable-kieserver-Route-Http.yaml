@@ -1,0 +1,20 @@
+kind: Route
+    apiVersion: v1
+    id: "insecure-${APPLICATION_NAME}-kieserver-http"
+    metadata:
+      name: "insecure-${APPLICATION_NAME}-kieserver"
+      labels:
+        application: "${APPLICATION_NAME}"
+        service: "${APPLICATION_NAME}-kieserver"
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+        description: Route for KIE Server's http service.
+        haproxy.router.openshift.io/balance: source
+        meta.helm.sh/release-name: {{ .Values.APPLICATION_NAME }}
+        meta.helm.sh/release-namespace: {{ .Values.NAMESPACE }}
+    spec:
+      host: "${KIE_SERVER_HOSTNAME_HTTP}"
+      to:
+        name: "${APPLICATION_NAME}-kieserver"
+      port:
+        targetPort: http
