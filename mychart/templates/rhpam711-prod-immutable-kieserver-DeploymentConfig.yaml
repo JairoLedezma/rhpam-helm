@@ -228,7 +228,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: KUBERNETES_LABELS
-              value: "cluster=jgrp.k8s.${APPLICATION_NAME}.kieserver"
+              value: "cluster=jgrp.k8s.{{.Values.APPLICATION_NAME}}.kieserver"
             - name: SSO_URL
               value: "{{.Values.SSO_URL}}"
             - name: SSO_OPENIDCONNECT_DEPLOYMENTS
