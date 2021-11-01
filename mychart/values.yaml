@@ -3,7 +3,7 @@
 prefix: 
 # Name of the kieserver deployment
 NAMESPACE: jl-rds-temp-sandbox
-APPLICATION_NAME: ekata-two
+APPLICATION_NAME: ekata-three
 # The name where credentials secret are found
 CREDENTIALS_SECRET: credentials
 # Name of the namespace where the imagestreams can be found
