@@ -56,7 +56,7 @@ DROOLS_SERVER_FILTER_CLASSES: true
 KIE_SERVER_HOSTNAME_HTTPS: 
 KIE_SERVER_HOSTNAME_HTTP:
 
-SOURCE_REPOSITORY_URL: https://gitlab.com/curo777/ekata-pam.git
+SOURCE_REPOSITORY_URL: https://gitlab.com/curo777/ven-equifax.git
 # Select master branch from our repo
 SOURCE_REPOSITORY_REF: 
 #The context directory
