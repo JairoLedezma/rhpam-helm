@@ -13,7 +13,7 @@ KIE_SERVER_PERSISTENCE_DS:
 # Dialect of the postgresql database
 KIE_SERVER_EXTERNALDB_DIALECT: org.hibernate.dialect.PostgreSQL95Dialect
 # Host of the external DB
-KIE_SERVER_EXTERNALDB_SERVICE_HOST: kieserver-dev.czxz9pla3u0h.us-east-2.rds.amazonaws.com
+KIE_SERVER_EXTERNALDB_SERVICE_HOST: 
 # Port of the external DB
 KIE_SERVER_EXTERNALDB_SERVICE_PORT: 5432
 # The driver for the external DB
@@ -23,7 +23,7 @@ KIE_SERVER_EXTERNALDB_DB: kieserver
 # Username of user in DB
 KIE_SERVER_EXTERNALDB_USER: postgres
 # Password of user in DB
-KIE_SERVER_EXTERNALDB_PWD: Nvsconsulting!0
+KIE_SERVER_EXTERNALDB_PWD: 
 # Left blank intentionally / does not apply to postgresql
 EXTENSIONS_IMAGE: 
 # Left blank intentionally / does not apply to postgresql
